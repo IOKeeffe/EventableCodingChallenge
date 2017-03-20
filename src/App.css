@@ -24,6 +24,15 @@
   align-items: center;
 }
 
+.Error-item {
+  list-style: none;
+  color: red;
+}
+
+h3 {
+  font-size: inherit;
+}
+
 .Event-item {
   margin-bottom: 30px;
   border: 1px solid black;

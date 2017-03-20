@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
+import logo from './logo.svg';
 
 export default class EventForm extends Component {
   constructor(props) {
     super(props);
-    // this.resetState();
-    this.checkErrors = this.checkErrors.bind(this)
     this.submitForm = this.submitForm.bind(this);
   }
 
@@ -28,7 +27,6 @@ export default class EventForm extends Component {
 
   checkErrors() {
     let newErrors = [];
-    debugger;
     if(!this.state.title) {
       newErrors.push("Please add an event title.");
     }
@@ -41,39 +39,45 @@ export default class EventForm extends Component {
     if(this.state.start_time > this.state.end_time) {
       newErrors.push("Event can't end before it begins.");
     }
-    this.setState({errors: newErrors});
+    return newErrors;
   }
 
   submitForm(e) {
     e.preventDefault();
-    this.checkErrors();
-    if(this.state.errors.length > 0) {
-      this.props.receiveErrors(this.state.errors);
+    let errors = this.checkErrors();
+    if(errors.length > 0) {
+      this.props.receiveErrors(errors);
     }
     else {
       this.props.receiveEvent(this.state);
       this.resetState();
     }
-    this.setState({errors: []});
   }
 
   render() {
-    return (
-      <form onSubmit={this.submitForm}>
-        <label>Title:
-          <input type="text" onChange={this.update('title')} />
-        </label>
-        <label>Location:
-          <input type="text" onChange={this.update('locations')} />
-        </label>
-        <label>Start Date:
-          <input type="datetime-local" onChange={this.update('start_time')} />
-        </label>
-        <label>End Date:
-          <input type="datetime-local" onChange={this.update('end_time')} />
-        </label>
-        <input type="submit" value="Submit Event" className="submit" />
-      </form>
-    )
+    if(this.state) {
+      return (
+        <form onSubmit={this.submitForm}>
+          <label>Title:
+            <input type="text" value={this.state.title} onChange={this.update('title')} />
+          </label>
+          <label>Location:
+            <input type="text" value={this.state.locations} onChange={this.update('locations')} />
+          </label>
+          <label>Start Date:
+            <input type="datetime-local" value={this.state.start_date} onChange={this.update('start_time')} />
+          </label>
+          <label>End Date:
+            <input type="datetime-local" value={this.state.end_date} onChange={this.update('end_time')} />
+          </label>
+          <input type="submit" value="Submit Event" className="submit" />
+        </form>
+      )
+    }
+    else {return (
+      <div>
+        <img src={logo} className='App-logo' alt='Logo' />
+      </div>
+    )}
   }
 }

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import EventForm from './EventForm';
+import SearchForm from './SearchForm';
 import moment from 'moment';
 import merge from 'lodash/merge';
 
@@ -12,6 +13,7 @@ class App extends Component {
     this.state = {sortingBy: 'date', errors: [], searchString: ''};
     this.parseEvents = this.parseEvents.bind(this);
     this.receiveEvent = this.receiveEvent.bind(this);
+    this.receiveSearchString = this.receiveSearchString.bind(this);
     this.receiveErrors = this.receiveErrors.bind(this);
   }
 
@@ -43,8 +45,7 @@ class App extends Component {
     event.end_time = moment(event.end_time);
   }
 
-  sortEvents(sortingCategory, e) {
-    if(e) e.preventDefault();
+  sortEvents(sortingCategory) {
     let newEventsState = this.state.events.sort((ev1, ev2) => {
       if(sortingCategory === 'title') {
         this.setState({sortingBy: 'title'});
@@ -62,7 +63,6 @@ class App extends Component {
   }
 
   receiveErrors(errors) {
-    debugger;
     this.setState({errors: errors});
   }
 
@@ -78,7 +78,11 @@ class App extends Component {
     this.momentifyEvent(event);
     newState.events.push(event);
     this.setState(newState);
-    this.sortEvents(this.state.sortingBy)
+
+  }
+
+  receiveSearchString(string) {
+    this.setState({searchString: string});
   }
 
   renderErrors() {
@@ -93,8 +97,11 @@ class App extends Component {
   }
 
   renderEvents() {
-    let events = this.state.events.map((event, i) => {
+    let events = this.state.events.filter((event) => {
+      return event.title.indexOf(this.state.searchString) > -1;
+    });
 
+    return events.map((event, i) => {
       return (
         <li className='Event-item' key={i}>
           <h4>{event.title}</h4>
@@ -103,8 +110,7 @@ class App extends Component {
           {this.renderLocation(event.locations)}
         </li>
       )
-    })
-    return events;
+    });
   }
 
   stringifyMoment(moment) {
@@ -122,14 +128,15 @@ class App extends Component {
             </h3>
             <h2>My Events</h2>
             <ul>
-              {this.renderErrors()}
             </ul>
           </div>
           <div className='App-content'>
+            {this.renderErrors()}
             <div className='Button-div'>
               <button onClick={(e) => this.sortEvents('title')}>Sort by Title</button>
               <button onClick={(e) => this.sortEvents('date')}>Sort by Date</button>
             </div>
+            <SearchForm receiveSearchString={this.receiveSearchString} />
             <EventForm receiveEvent={this.receiveEvent} receiveErrors={this.receiveErrors} />
             <ul className='Event-list'>
               {this.renderEvents()}
