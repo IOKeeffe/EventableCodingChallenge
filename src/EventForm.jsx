@@ -8,7 +8,7 @@ export default class EventForm extends Component {
   }
 
   resetState() {
-    this.setState({errors: [], title: '', start_time: '', end_time: '', locations: ''});
+    this.setState({errors: [], title: '', start_time: '', end_time: '', locations: [new Object({name: ''})]});
   }
   componentDidMount() {
     this.resetState();
@@ -17,7 +17,7 @@ export default class EventForm extends Component {
   update(field) {
     return (e) => {
       if(field === 'locations') {
-        this.setState({[field]: [e.target.value]});
+        this.setState({[field]: [new Object({name: e.target.value})]});
       }
       else {
         this.setState({[field]: e.target.value});
@@ -62,7 +62,7 @@ export default class EventForm extends Component {
             <input type="text" value={this.state.title} onChange={this.update('title')} />
           </label>
           <label>Location:
-            <input type="text" value={this.state.locations} onChange={this.update('locations')} />
+            <input type="text" value={this.state.locations[0].name} onChange={this.update('locations')} />
           </label>
           <label>Start Date:
             <input type="datetime-local" value={this.state.start_date} onChange={this.update('start_time')} />
