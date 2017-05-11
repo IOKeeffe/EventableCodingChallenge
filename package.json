@@ -3,14 +3,16 @@
   "version": "0.0.1",
   "private": true,
   "devDependencies": {
+    "raw-loader": "^0.5.1",
     "react-scripts": "0.7.0"
   },
   "dependencies": {
+    "jquery": "^3.2.1",
     "lodash": "^4.17.2",
     "moment": "^2.17.0",
     "react": "^15.4.1",
     "react-bootstrap": "^0.30.7",
-    "react-dom": "^15.4.1"
+    "react-dom": "^15.4.1",
   },
   "scripts": {
     "start": "react-scripts start",
